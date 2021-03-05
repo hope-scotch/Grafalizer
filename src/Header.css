@@ -1,0 +1,126 @@
+.header-container {
+  background-color: black;
+  display: flex;
+  justify-content: space-around;
+}
+
+.button-container {
+  margin: 10px;
+  width: 40%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.arrow {
+  position: absolute;
+  top: 13px;
+  left: 4.5px;
+  width: 18px;
+  height: 2px;
+  transform: rotate(-45deg);
+  background-color: white;
+}
+
+.arrow-head {
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.right {
+  position: absolute;
+  top: 13px;
+  left: 6px;
+  transform: rotate(90deg)
+}
+
+.left {
+  position: absolute;
+  top: 7px;
+  left: 13px;
+  transform: rotate(-90deg)
+}
+
+.all-button {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  color: white;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.2s, height 0.5s;
+}
+
+.all-button:hover {
+  width: 34px;
+  height: 34px;
+}
+
+.all-button:active {
+  width: 34px;
+  height: 34px;
+}
+
+.directed {
+  background-color: rgb(255, 85, 113);
+  border: 1px solid rgb(255, 85, 113);
+}
+
+.directed:hover {
+  background-color: rgb(255, 92, 119);
+  border: 1px solid rgb(255, 92, 119);
+  box-shadow: 0px 0px 10px 2px rgb(255, 85, 113);
+}
+
+.undirected {
+  background-color: rgb(255, 85, 113);
+  border: 1px solid rgb(255, 85, 113);
+}
+
+.undirected:hover {
+  background-color: rgb(255, 92, 119);
+  border: 1px solid rgb(255, 92, 119);
+  box-shadow: 0px 0px 10px 2px rgb(255, 85, 113);
+}
+
+.new-node {
+  background-color: rgb(6, 199, 199);
+  border: 1px solid rgb(6, 199, 199);
+}
+
+.new-node:hover {
+  background-color: rgb(1, 207, 243);
+  border: 1px solid rgb(1, 207, 243);
+  box-shadow: 0px 0px 10px 2px rgb(1, 207, 243);
+}
+
+.new-node-main {
+  position: absolute;
+  z-index: 3;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.1s, height 0.5s;
+  border-radius: 50%;
+  border: 2px solid white;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.new-node-main:hover {
+  background-color: rgb(21, 220, 255);
+  border: 1px solid rgb(21, 220, 255);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+}

@@ -1,0 +1,42 @@
+.node-main {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.1s, height 0.5s;
+  border-radius: 50%;
+  border: 4px solid white;
+  box-shadow: 0px 0px 10px 3px white;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+  background-color: black;
+}
+
+.node-main:hover, .node-main-active {
+  width: 34px;
+  height: 34px;
+  border: 3px solid yellow;
+  background-color: rgb(0, 255, 255);
+  box-shadow: 0px 0px 10px 3px yellow;
+}
+
+.node-main:active {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.1s, height 0.5s;
+  border-radius: 50%;
+  border: 3px solid yellow;
+  background-color: rgb(0, 255, 255);
+  box-shadow: 0px 0px 10px 3px yellow;
+  cursor: pointer;
+  text-decoration: none;
+}

@@ -1,0 +1,20 @@
+.canvas {
+  position: absolute;
+  z-index: 1;
+  border: 1px solid black;
+}
+
+.container {
+  background-color: black;
+  display: flex;
+}
+
+.node-container {
+  position: absolute;
+  z-index: 3;
+}
+
+.arrow-container {
+  position: absolute;
+  z-index: 2
+}
