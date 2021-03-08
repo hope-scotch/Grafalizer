@@ -4,7 +4,7 @@ import './Arrow.css'
 
 const RADIUS = 30
 
-const Arrow = ({ fromx, fromy, tox, toy, id, flag, removeEdge, addWeight }) => {
+const Arrow = ({ fromx, fromy, tox, toy, id, flag, removeEdge, addWeight, progress = '0%' }) => {
   
   const [visible, setVisibility] = useState('hidden')
   const [value, setValue] = useState('')
@@ -19,13 +19,16 @@ const Arrow = ({ fromx, fromy, tox, toy, id, flag, removeEdge, addWeight }) => {
   let angle = Math.atan((fromy - toy) / (tox - fromx))
   let offs = 0
 
-  if (angle < 0)
+  if (angle <= 0) {
     offs = 25
-
-  if((fromy < toy && fromx > tox) || (fromy > toy && fromx > tox))
-    angle += Math.PI
-
-  if (angle < 0) angle += Math.PI
+    if (fromy <= toy && tox > fromx)
+      angle = 2 * Math.PI + angle
+    else
+      angle = Math.PI + angle
+  } else {
+    if (fromy <= toy && tox < fromx)
+      angle = Math.PI + angle
+  }
 
   const handleChange = e => {
     setValue(e.target.value)
@@ -33,13 +36,12 @@ const Arrow = ({ fromx, fromy, tox, toy, id, flag, removeEdge, addWeight }) => {
   }
 
   if (fromx === tox && fromy === toy) {
-    console.log('self-loop')
     return (
       <div>
         <input
           className={'input-weight'}
           autoFocus
-          placeholder='0' 
+          placeholder={0} 
           type='text' 
           style={{
             position: 'absolute',
@@ -51,6 +53,10 @@ const Arrow = ({ fromx, fromy, tox, toy, id, flag, removeEdge, addWeight }) => {
           value={value}
           onChange={handleChange}
           onBlur={() => {
+            if (value !== '')
+              addWeight(id, value)
+          }}
+          onSubmit={() => {
             if (value !== '')
               addWeight(id, value)
           }}
@@ -74,13 +80,12 @@ const Arrow = ({ fromx, fromy, tox, toy, id, flag, removeEdge, addWeight }) => {
       </div>
     )
   } else {
-    console.log(fromx, fromy, tox, toy)
     return (
       <div>
         <input
           className={'input-weight'}
           autoFocus
-          placeholder='0' 
+          placeholder={0} 
           type='text' 
           style={{
             position: 'absolute',
@@ -92,6 +97,10 @@ const Arrow = ({ fromx, fromy, tox, toy, id, flag, removeEdge, addWeight }) => {
           value={value}
           onChange={handleChange}
           onBlur={() => {
+            if (value !== '')
+              addWeight(id, value)
+          }}
+          onSubmit={() => {
             if (value !== '')
               addWeight(id, value)
           }}
@@ -113,7 +122,14 @@ const Arrow = ({ fromx, fromy, tox, toy, id, flag, removeEdge, addWeight }) => {
             e.preventDefault()
             removeEdge(id)}
           }>
-          <div className={`arrow-main ${flag}-arrow`}></div>
+          <div className={`arrow-main ${flag}-arrow`}>
+            <div 
+              style={{
+                width: progress,
+                zIndex: 10,
+                backgroundColor: 'red'
+              }}></div>
+          </div>
         </div>
       </div>
     )

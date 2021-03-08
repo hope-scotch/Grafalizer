@@ -13,6 +13,11 @@ const algoOptions = [
     text: 'BFS',
     value: 'BFS'
   },
+  {
+    key: 'Dijkstra',
+    text: 'Dijkstra',
+    value: 'Dijkstra'
+  }
 ]
 
 const Header = ({ modeHandler, algoHandler }) => {
@@ -50,9 +55,18 @@ const Header = ({ modeHandler, algoHandler }) => {
           <div className='arrow-head left'/>
         </button>
         <button 
+          style={{fontSize: '0.8em'}}
           className='new-node all-button' 
           onClick={() => modeHandler(3)}>
-        <div className='new-node-main'>R</div>
+        <div>Run</div>
+        </button>
+        <button 
+          style={{
+            fontSize: '0.7em'
+          }}
+          className='new-node all-button' 
+          onClick={() => modeHandler(4)}>
+        <div>Reset</div>
         </button>
         
       </div>

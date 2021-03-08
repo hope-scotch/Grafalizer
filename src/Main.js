@@ -2,6 +2,8 @@ import React from 'react'
 
 import Node from './Node.js'
 import Arrow from './Arrow.js'
+import Drawer from './Drawer.js'
+
 import './Main.css'
 import { runAlgo } from './runAlgo.js'
 
@@ -11,20 +13,32 @@ class Main extends React.Component {
     this.canvasRef = React.createRef()
   }
 
-  state = { nodes: [{}], items: [], edges: [{}], arrows: [{}], selected: 0, adj: {} }
+  state = { nodes: [{}], items: [], edges: [{}], arrows: [{}], selected: 0, adj: {}, bundle: [] }
 
   forceRender = () => this.forceUpdate()
 
-  componentDidUpdate() {
-    if (this.props.mode === 3) {
+  componentDidUpdate(prevProps) {
+    if (this.props.mode === 3 && prevProps !== this.props) {
       this.formAdjacencyList()
-      runAlgo(this.props.algo, this.state.items, this.state.nodes, this.state.adj, this.changeState, this.forceRender)
+      this.state.bundle = []
+      this.props.drawerHandler(true)
+
+      runAlgo(this.props.algo, this.state.items, this.state.nodes, this.state.adj, 
+            this.changeState, this.forceRender, this.state.bundle, this.state.edges, this.state.arrows,
+            this.removeEdge, this.addWeight)
       this.props.modeHandler(0)
-    } 
+      this.state.adj = []
+    } else if (this.props.mode === 4 && prevProps !== this.props) {
+      this.setState({ nodes: [{}], items: [], edges: [{}], arrows: [{}], selected: 0, adj: {}, bundle: [{}] })
+      this.props.modeHandler(0)
+    }
   }
 
   formAdjacencyList = () => {
     this.state.edges.forEach((edge) => {
+      if (edge === undefined)
+        return
+        
       if (this.state.adj[edge.from] === undefined)
         this.state.adj[edge.from] = []
       this.state.adj[edge.from].push({to: edge.to, weight: edge.weight })
@@ -206,18 +220,20 @@ class Main extends React.Component {
   render() {
     return (
       <div className='container'>
-        <canvas 
-            width={window.innerWidth} 
-            height={window.innerHeight} 
-            style={{"backgroundColor": "black", "padding": "20px"}} 
+        <div className='canvas'
+            style={{
+              height: '90%',
+              width: '65%',
+            }} 
             onClick={(e) => {
               if (this.props.mode === 0)
                 this.createNode(e)}} 
             ref={this.canvasRef}
             onContextMenu={(e) => e.preventDefault()}>
-        </canvas>
+        </div>
         <div className='node-container'>{this.state.items}</div>
         <div className='arrow-container'>{this.state.arrows.map((arrow) => arrow.component)}</div>
+        <Drawer drawer={this.props.drawer} algo={this.props.algo} bundle={this.state.bundle} />
       </div>
   )}
 }

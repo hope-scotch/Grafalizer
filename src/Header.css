@@ -107,7 +107,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: width 0.1s, height 0.5s;
+  transition: width 0.1s, height 0.1s;
   border-radius: 50%;
   border: 2px solid white;
   color: white;
@@ -117,7 +117,7 @@
 
 .new-node-main:hover {
   background-color: rgb(21, 220, 255);
-  border: 1px solid rgb(21, 220, 255);
+  border: 2px solid white;
   display: flex;
   align-items: center;
   justify-content: center;
