@@ -6,9 +6,11 @@
 
 This application has been made using React.js.
 
-<img src = "https://github.com/hope-scotch/Grafalizer/blob/main/resources/ss-1.PNG">
+<img src = "https://github.com/hope-scotch/Grafalizer/blob/master/resources/ss-1.PNG">
 
-<img src = "https://github.com/hope-scotch/Grafalizer/blob/main/resources/ss-2.PNG">
+<img src = "https://github.com/hope-scotch/Grafalizer/blob/master/resources/ss-2.PNG">
+
+<img src = "https://github.com/hope-scotch/Grafalizer/blob/master/resources/ss-3.PNG">
 
 ## **How to use**
 
