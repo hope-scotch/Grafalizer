@@ -12,6 +12,8 @@ This application has been made using React.js.
 
 <img src = "https://github.com/hope-scotch/Grafalizer/blob/master/resources/ss-3.PNG">
 
+<img src = "https://github.com/hope-scotch/Grafalizer/blob/master/resources/ss-4.PNG">
+
 ## **How to use**
 
 1. Add nodes by clicking anywhere on the canvas
