@@ -43,7 +43,7 @@ export const runAlgo = async (algo, items, nodes, graph, changeState,
       if (edges[i].from === from && edges[i].to === to) {
         let start = 0, end = 100, change = 1
         if (rev) {
-          [from, to] = [to, from] 
+          // [from, to] = [to, from] 
           start = 100
           end = 0
           change = -1 
@@ -58,7 +58,7 @@ export const runAlgo = async (algo, items, nodes, graph, changeState,
                 tox={nodes[to].x}
                 toy={nodes[to].y}
                 id={i}
-                flag={edges[i].directed ? 'directed': 'undirected'}
+                flag={edges[i].flag === 1 ? 'directed': 'undirected'}
                 removeEdge={removeEdge}
                 addWeight={addWeight}
                 progress={`${done}%`}
@@ -171,7 +171,7 @@ export const runAlgo = async (algo, items, nodes, graph, changeState,
   }
 
   if (algo === 'Dijkstra') {
-    
+
     const pq = new PriorityQueue()
     pq.insert(1, 0)
     dist[1] = 0
@@ -200,16 +200,11 @@ export const runAlgo = async (algo, items, nodes, graph, changeState,
       if (graph[at] === undefined)
         graph[at] = []
 
-      graph[at].forEach(async (edge) => {
-        const to = edge.to
-        const len = edge.weight
+      for (let i = 0; i < graph[at].length; i++) {
+        const to = graph[at][i].to
+        const len = graph[at][i].weight
 
         if (dist[at] + len < dist[to]) {
-          pq.remove(to, dist[to])
-          dist[to] = dist[at] + len
-          p[to] = at
-          pq.insert(to, dist[to])
-          
           let path = []
           
           for (let k = to; k !== 1; k = p[k]) {
@@ -218,20 +213,46 @@ export const runAlgo = async (algo, items, nodes, graph, changeState,
           }
           
           path = [1, ...path]
+          
+          await highlightEdge(p[to], to, true)
 
-          for (let k = 0; k < path.length - 1; k++) {
-            await highlightEdge(path[k], path[k + 1], false)
-            await sleep(10)
-          }
+          pq.remove(to, dist[to])
+          dist[to] = dist[at] + len
+          p[to] = at
+          pq.insert(to, dist[to])
+          
+          await highlightEdge(at, to, false)
+
+          items[to - 1] = 
+          <Node
+            x={nodes[to].x}
+            y={nodes[to].y}
+            id={to}
+            selected={2000 + to}
+            changeState={changeState}
+          />
+          updateMain()
+          await sleep(500)
+
           // console.log(path)
           bundle[to - 1] = {node: to, dist: dist[to]}
-
-          for (let k = 0; k < path.length - 1; k++) {
-            await highlightEdge(path[k], path[k + 1], true)
-            await sleep(10)
-          }
         }
-      })
+      }
+
+      for (let i = 0; i < graph[at].length; i++) {
+        const to = graph[at][i].to;
+
+        items[to - 1] =
+        <Node
+          x={nodes[to].x}
+          y={nodes[to].y}
+          id={to}
+          selected={0}
+          changeState={changeState}
+        />
+        updateMain()
+        await sleep(50)
+      }
 
       items[at - 1] = 
         <Node
@@ -242,7 +263,7 @@ export const runAlgo = async (algo, items, nodes, graph, changeState,
           changeState={changeState}
         />
       updateMain()
-      await sleep(500)
+      await sleep(1000)
     }
 
     await sleep(2000)

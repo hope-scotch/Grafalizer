@@ -4,7 +4,7 @@ import './Arrow.css'
 
 const RADIUS = 30
 
-const Arrow = ({ fromx, fromy, tox, toy, id, flag, removeEdge, addWeight, progress = '0%' }) => {
+const Arrow = ({ fromx, fromy, tox, toy, id, flag, removeEdge, addWeight, progress = '0%'}) => {
   
   const [visible, setVisibility] = useState('hidden')
   const [value, setValue] = useState('')

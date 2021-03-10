@@ -27,9 +27,17 @@
 .node-main-visited {
   width: 32px;
   height: 32px;
-  border: 3px solid yellow;
+  border: 3px solid rgb(0, 168, 168);
   background-color: rgb(0, 121, 121);
-  box-shadow: 0px 0px 10px 3px yellow;
+  box-shadow: 0 0 5px 0.5px rgb(0, 168, 168);
+}
+
+.node-main-visited-2 {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgb(106, 228, 132);
+  background-color: rgb(56, 230, 94);
+  box-shadow: 0px 0px 5px 0.5px rgb(106, 228, 132);
 }
 
 .node-main:active {
