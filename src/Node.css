@@ -13,7 +13,7 @@
   color: white;
   cursor: pointer;
   text-decoration: none;
-  background-color: black;
+  background-color: transparent;
 }
 
 .node-main:hover, .node-main-active {

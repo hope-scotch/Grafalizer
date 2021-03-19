@@ -14,7 +14,7 @@ class Queue {
 }
 
 export const runAlgo = async (algo, items, nodes, graph, changeState, 
-  updateMain, bundle, edges, arrows, removeEdge, addWeight) => {
+  updateMain, bundle, edges, arrows, removeEdge, addWeight, start) => {
 
   const sleep = delay => new Promise ((resolve) => setTimeout(resolve, delay))
   
@@ -35,6 +35,32 @@ export const runAlgo = async (algo, items, nodes, graph, changeState,
       updateMain()
     }
   }
+
+  const resetEdges = async () => {
+    for (let id = 1; id <= edges.length; id ++) {
+      if (edges[id] === undefined ) continue
+
+      const from = edges[id].from, to = edges[id].to
+
+      arrows[id] = {
+        component: 
+          <Arrow
+            fromx={nodes[from].x}
+            fromy={nodes[from].y}
+            tox={nodes[to].x}
+            toy={nodes[to].y}
+            id={id}
+            flag={edges[id].flag === 1 ? 'directed': 'undirected'}
+            removeEdge={removeEdge}
+            addWeight={addWeight}
+            progress={`${0}%`}
+          />,
+        id: id
+      }
+    }
+    await sleep(500)
+    updateMain()
+  }
   
   const highlightEdge = async (from, to, rev) => {
     for (let i = 0; i < edges.length; i++) {
@@ -42,6 +68,37 @@ export const runAlgo = async (algo, items, nodes, graph, changeState,
         continue
       if (edges[i].from === from && edges[i].to === to) {
         let start = 0, end = 100, change = 1
+        if (rev) {
+          // [from, to] = [to, from] 
+          start = 100
+          end = 0
+          change = -1 
+        }
+
+        for (let done = start; done != end; done += (change)) {
+          arrows[i] = {
+            component: 
+              <Arrow
+                fromx={nodes[from].x}
+                fromy={nodes[from].y}
+                tox={nodes[to].x}
+                toy={nodes[to].y}
+                id={i}
+                flag={edges[i].flag === 1 ? 'directed': 'undirected'}
+                removeEdge={removeEdge}
+                addWeight={addWeight}
+                progress={`${done}%`}
+              />,
+            id: i
+          }
+          updateMain()
+          await sleep(5)
+        }
+        break
+      }
+      if (edges[i].flag === -1 && edges[i].to === from && edges[i].from === to) {
+        let start = 0, end = 100, change = 1
+        // [from, to] = [to, from]
         if (rev) {
           // [from, to] = [to, from] 
           start = 100
@@ -152,6 +209,9 @@ export const runAlgo = async (algo, items, nodes, graph, changeState,
   }
 
   if (algo === 'DFS') {
+    resetEdges()
+
+    await dfs(start, vis)
     for (let id = 1; id < nodes.length; id ++) {
       if (!vis[id])
         await dfs(id, vis)
@@ -161,7 +221,9 @@ export const runAlgo = async (algo, items, nodes, graph, changeState,
   }
 
   if (algo === 'BFS') {
+    resetEdges()
 
+    await bfs(start, vis)
     for (let id = 1; id < nodes.length; id ++) {
       if (!vis[id])
         await bfs(id, vis)
@@ -171,10 +233,11 @@ export const runAlgo = async (algo, items, nodes, graph, changeState,
   }
 
   if (algo === 'Dijkstra') {
+    resetEdges()
 
     const pq = new PriorityQueue()
-    pq.insert(1, 0)
-    dist[1] = 0
+    pq.insert(start, 0)
+    dist[start] = 0
 
     for (let i = 1; i < nodes.length; i++) {
       bundle.push({node: i, dist: INF})
@@ -207,12 +270,12 @@ export const runAlgo = async (algo, items, nodes, graph, changeState,
         if (dist[at] + len < dist[to]) {
           let path = []
           
-          for (let k = to; k !== 1; k = p[k]) {
+          for (let k = to; k !== start; k = p[k]) {
             path = [k, ...path]
             if (p[k] === -1) break
           }
           
-          path = [1, ...path]
+          path = [start, ...path]
           
           await highlightEdge(p[to], to, true)
 

@@ -13,21 +13,36 @@ class Main extends React.Component {
     this.canvasRef = React.createRef()
   }
 
-  state = { nodes: [{}], items: [], edges: [{}], arrows: [{}], selected: 0, adj: {}, bundle: [] }
+  state = { nodes: [{}], items: [], edges: [{}], arrows: [{}], selected: 0, adj: {}, bundle: [], notif: false }
 
   forceRender = () => this.forceUpdate()
 
   componentDidUpdate(prevProps) {
-    if (this.props.mode === 3 && prevProps !== this.props) {
-      this.formAdjacencyList()
-      this.state.bundle = []
+    if (this.props.algo !== prevProps.algo) {
+      this.props.drawerHandler(false)
+    }
+    if (this.props.mode === 'run-algo') {
+      if (this.state.selected) {
+        const start = this.state.selected
+        this.state.selected = 0
+
+        this.formAdjacencyList()
+        this.state.bundle = []
+        this.props.drawerHandler(true)
+
+        runAlgo(this.props.algo, this.state.items, this.state.nodes, this.state.adj, 
+              this.changeState, this.forceRender, this.state.bundle, this.state.edges, this.state.arrows,
+              this.removeEdge, this.addWeight, start)
+        this.props.modeHandler(0)
+        this.state.adj = []
+      }
+    }
+    if (this.props.mode === 3) {
+      this.state.notif = true
       this.props.drawerHandler(true)
 
-      runAlgo(this.props.algo, this.state.items, this.state.nodes, this.state.adj, 
-            this.changeState, this.forceRender, this.state.bundle, this.state.edges, this.state.arrows,
-            this.removeEdge, this.addWeight)
-      this.props.modeHandler(0)
-      this.state.adj = []
+      this.props.modeHandler('run-algo')
+
     } else if (this.props.mode === 4 && prevProps !== this.props) {
       this.setState({ nodes: [{}], items: [], edges: [{}], arrows: [{}], selected: 0, adj: {}, bundle: [{}] })
       this.props.modeHandler(0)
@@ -62,9 +77,15 @@ class Main extends React.Component {
   }
 
   changeState = (id) => {
-    if (this.props.mode === 1 || this.props.mode === -1) {
+    if (this.props.mode === 1 || this.props.mode === -1 || this.props.mode === 'run-algo') {
       if (this.state.selected === 0) {
+        
         this.setState({ selected: id })
+
+        if (this.props.mode === 'run-algo') {
+          this.setState({ notif: false })
+          return
+        }
 
         let itemList = [...this.state.items]
         let nodeList = [...this.state.nodes]
@@ -96,7 +117,8 @@ class Main extends React.Component {
             y = {_y}
             id = {this.state.selected}
             selected = {0}
-            changeState = {this.changeState} />
+            changeState = {this.changeState}
+             />
         
         this.setState({ items: itemList, selected: 0 })
 
@@ -233,7 +255,7 @@ class Main extends React.Component {
         </div>
         <div className='node-container'>{this.state.items}</div>
         <div className='arrow-container'>{this.state.arrows.map((arrow) => arrow.component)}</div>
-        <Drawer drawer={this.props.drawer} algo={this.props.algo} bundle={this.state.bundle} />
+        <Drawer drawer={this.props.drawer} algo={this.props.algo} bundle={this.state.bundle} notif={this.state.notif} />
       </div>
   )}
 }

@@ -11,7 +11,7 @@ const Arrow = ({ fromx, fromy, tox, toy, id, flag, removeEdge, addWeight, progre
 
   const delx = tox - fromx
   const dely = toy - fromy
-  const width = Math.sqrt((delx * delx) + (dely * dely)) - RADIUS / 2
+  const width = Math.sqrt((delx * delx) + (dely * dely)) - RADIUS / 1.1
 
   const cenx = (tox + fromx) / 2
   const ceny = (toy + fromy) / 2
